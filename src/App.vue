@@ -1,7 +1,7 @@
 <template>
   <div class="app">
     <vue-topprogress ref="topProgress"></vue-topprogress>
-    <div class="container mt-4">
+    <div class="container">
       <Navigation />
       <router-view />
     </div>
@@ -29,6 +29,6 @@ export default {
 </script>
 <style lang="scss" scoped>
 .app {
-  margin-bottom: 2rem;
+  // margin-bottom: 2rem;
 }
 </style>

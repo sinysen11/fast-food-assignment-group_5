@@ -16,7 +16,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .products {
-  margin-top: 2rem;
+  margin-top: 6rem;
 }
 @media screen and (max-width: 767px) {
   .products {

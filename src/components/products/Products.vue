@@ -1,8 +1,10 @@
 <template>
   <div>
-    <input type="text" v-model="input" placeholder="Search fruits..." />
-    <div class="btn-container">
-      <button class="btn btn-success" @click="openDialog">Create</button>
+    <div class="search-container">
+      <input type="text" v-model="input" placeholder="Search fruits..." class="search-input" />
+      <div class="btn-container">
+        <button class="btn btn-success" @click="openDialog">Create</button>
+      </div>
     </div>
 
     <div v-if="showDialog" class="modal">
@@ -48,6 +50,8 @@
       </div>
     </div>
 
+    <hr>
+
     <div v-if="filteredProducts.length > 0" class="products">
       <div class="columns is-multiline is-desktop is-widescreen is-fullhd">
         <div v-for="product in filteredProducts" :key="product.id"
@@ -73,9 +77,10 @@
                   <p>{{ product.description.substring(0, 100) }}</p>
                 </div>
                 <div class="actions buttons">
-                  <div>
-                    <button type="button" class="btn btn-primary">+ Add</button>
-                  </div>
+                  <form action method="post" @submit.prevent="addThisToCart">
+                    <button type="submit" class="btn btn-primary">+ Add</button>
+                  </form>
+
                   <div class="action-buttons-right">
                     <button type="button" class="btn btn-primary" @click="openEditDialog(product)">Edit</button>
                     <button type="button" class="btn btn-primary"
@@ -115,6 +120,7 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from "vuex";
 import emptyProductImage from '@/assets/empty-cart.png';
 export default {
   name: "Products",
@@ -127,6 +133,7 @@ export default {
       editMode: false,
       confirmDelete: false,
       productIdToDelete: null,
+      quantity: 1,
       formData: {
         id: null,
         name: '',
@@ -143,9 +150,21 @@ export default {
       return this.products.filter(product =>
         product.name.toLowerCase().includes(this.input.toLowerCase())
       );
-    }
+    },
+    ...mapGetters(["singleProduct"])
+  },
+  beforeRouteUpdate(to, from, next) {
+    console.log(to)
+    this.fetchProductFromApi(to.params.id);
+    next();
   },
   methods: {
+    ...mapActions(["fetchProductFromApi", "addToCart"]),
+    addThisToCart() {
+      console.log("click")
+      this.addToCart({ qty: this.quantity, id: this.$route.params.id });
+    },
+
 
     openDialog() {
       this.editMode = false;
@@ -262,10 +281,23 @@ export default {
 
 
 <style scoped>
-.btn-container {
+.search-container {
   display: flex;
-  justify-content: flex-end;
+  align-items: center;
   margin-bottom: 20px;
+}
+
+.search-input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  max-width: 430px;
+  margin-right: 10px;
+}
+
+.btn-container {
+  margin-left: auto;
 }
 
 .btn {
@@ -426,9 +458,14 @@ label {
 .empty-logo {
   display: flex;
   justify-content: center;
+
   img {
     max-width: 30%;
   }
+}
+
+hr {
+  background-color: #007BFF;
 }
 
 @keyframes spin {
