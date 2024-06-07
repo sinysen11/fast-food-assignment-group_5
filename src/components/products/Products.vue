@@ -1,5 +1,6 @@
 <template>
   <div>
+    <input type="text" v-model="input" placeholder="Search fruits..." />
     <div class="btn-container">
       <button class="btn btn-success" @click="openDialog">Create</button>
     </div>
@@ -47,9 +48,10 @@
       </div>
     </div>
 
-    <div v-if="products.length > 0" class="products">
+    <div v-if="filteredProducts.length > 0" class="products">
       <div class="columns is-multiline is-desktop is-widescreen is-fullhd">
-        <div v-for="product in products" :key="product.id" class="column is-4-fullhd is-4-widescreen is-6-desktop">
+        <div v-for="product in filteredProducts" :key="product.id"
+          class="column is-4-fullhd is-4-widescreen is-6-desktop">
           <div class="product">
             <div class="card">
               <div class="card-image">
@@ -88,7 +90,9 @@
     </div>
 
     <div v-else>
-      <h1>No Product</h1>
+      <div class="empty-logo">
+        <img :src="emptyProductImage" class="" alt="Empty Product">
+      </div>
     </div>
 
     <div v-if="confirmDelete" class="modal">
@@ -111,10 +115,12 @@
 </template>
 
 <script>
+import emptyProductImage from '@/assets/empty-cart.png';
 export default {
   name: "Products",
   data() {
     return {
+      input: '',
       products: [],
       lastProductId: 0,
       showDialog: false,
@@ -128,8 +134,16 @@ export default {
         image: null,
         imagePreview: null,
         description: ''
-      }
+      },
+      emptyProductImage
     };
+  },
+  computed: {
+    filteredProducts() {
+      return this.products.filter(product =>
+        product.name.toLowerCase().includes(this.input.toLowerCase())
+      );
+    }
   },
   methods: {
 
@@ -394,23 +408,36 @@ label {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(255, 255, 255, 0.7); /* Semi-transparent white background */
+  background-color: rgba(255, 255, 255, 0.7);
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
 .loading-spinner {
-  border: 4px solid #f3f3f3; /* Light grey */
-  border-top: 4px solid #3498db; /* Blue */
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #3498db;
   border-radius: 50%;
   width: 30px;
   height: 30px;
-  animation: spin 2s linear infinite; /* Spin animation */
+  animation: spin 2s linear infinite;
+}
+
+.empty-logo {
+  display: flex;
+  justify-content: center;
+  img {
+    max-width: 30%;
+  }
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 </style>
