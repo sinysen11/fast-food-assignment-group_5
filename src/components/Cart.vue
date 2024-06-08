@@ -1,12 +1,10 @@
 <template>
-  <div class="cart" v-if="getCartItems.length > 0">
+  <div class="cart">
     <table class="table is-fullwidth is-bordered is-striped">
       <thead>
         <tr>
-          <th>Sr No.</th>
           <th>Product ID</th>
           <th>Image</th>
-          <th>Title</th>
           <th>Price</th>
           <th>Quantity</th>
           <th>Total</th>
@@ -19,13 +17,13 @@
           <td>{{ cart.id }}</td>
           <td>
             <figure class="image is-32x32">
-              <img :src="cart.product.image" alt="Image" />
+              <img alt="Image" />
             </figure>
           </td>
           <td>
-            <router-link :to="{ name: 'product', params: { id: cart.id } }">{{ cart.product.title }}</router-link>
+            <router-link :to="{ name: 'product', params: { id: cart.id } }">{{ "fdafdsa" }}</router-link>
           </td>
-          <td>${{ cart.product.price }}</td>
+          <td>${{ "3" }}</td>
           <td>{{ cart.qty }}</td>
           <td>${{ cart.price }}</td>
           <td>
@@ -33,45 +31,48 @@
               class="button is-danger mr-3"
               href="#"
               @click.prevent="removeItem(cart.id)"
-              title
+              
             >Remove</a>
           </td>
         </tr>
       </tbody>
     </table>
     <div class="cart-meta has-text-right is-size-5 mb-4">
-      <p>Total: ${{ getCartTotal }}</p>
+      <p>Total: ${{ "0" }}</p>
     </div>
-    <coupon :cart_items="getCartItems" />
+    <!-- <coupon :cart_items="getCartItems" /> -->
     <div class="cart-meta has-text-right is-size-5 mb-4">
-      <p class="mb-4">Sub Total: ${{ getCartSubTotal }}</p>
+      <p class="mb-4">Sub Total: ${{ "0" }}</p>
       <p>
         <a class="button is-success is-large">Checkout</a>
       </p>
     </div>
   </div>
-  <div v-else class="cart">
-    You cart is empty.
-    <router-link to="/">Start Shopping</router-link>
-  </div>
 </template>
 <script>
-import { mapGetters, mapActions } from "vuex";
-import Coupon from "./Coupon";
+import { mapGetters } from "vuex";
+// import Coupon from "./Coupon";
 export default {
   name: "Cart",
   components: {
-    Coupon
+    // Coupon
   },
   computed: {
-    ...mapGetters(["getCartItems", "getCartTotal", "getCartSubTotal"])
+    ...mapGetters(['getCartItems', 'getCartTotal', 'getCartSubTotal'])
+
+  },
+  created() {
+    this.fetchProductsFromLocalStorage()
   },
   methods: {
-    ...mapActions(["removeCartItem"]),
     removeItem(id) {
       this.removeCartItem({ itemID: id });
-    }
-  }
+    },
+    fetchProductsFromLocalStorage() {
+      const getCartItems = localStorage.getItem('products');
+      return getCartItems
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>
@@ -84,7 +85,7 @@ export default {
   transform: translateY(30px);
 }
 .cart {
-  margin-top: 3rem;
+  margin-top: 100px;
 }
 @media screen and (max-width: 767px) {
   .cart-meta {

@@ -77,11 +77,11 @@
                   <p>{{ product.description.substring(0, 100) }}</p>
                 </div>
                 <div class="actions buttons">
-                  <form action method="post" @submit.prevent="addThisToCart">
+                  <form action method="post" @submit.prevent="addThisToCart" v-if="!canCreate">
                     <button type="submit" class="btn btn-primary">+ Add</button>
                   </form>
 
-                  <div class="action-buttons-right">
+                  <div class="action-buttons-right" v-if="canCreate">
                     <button type="button" class="btn btn-primary" @click="openEditDialog(product)">Edit</button>
                     <button type="button" class="btn btn-primary"
                       @click="openDeleteConfirmation(product.id)">Delete</button>
@@ -165,7 +165,6 @@ export default {
   methods: {
     ...mapActions(["fetchProductFromApi", "addToCart"]),
     addThisToCart() {
-      console.log("click")
       this.addToCart({ qty: this.quantity, id: this.$route.params.id });
     },
 

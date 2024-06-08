@@ -1,3 +1,5 @@
+import products from "./products";
+
 const state = {
   cartItemsCount: 0,
   cartItems: [],
@@ -29,4 +31,5 @@ export default {
   getters,
   actions,
   mutations,
+  products
 };

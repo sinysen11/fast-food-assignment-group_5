@@ -7,6 +7,7 @@ import Coupons from "./modules/coupons";
 Vue.use(Vuex);
 
 export default new Vuex.Store({
+  
   state: {
     cartItems: [],
     user: JSON.parse(localStorage.getItem('user')) || null,
@@ -25,6 +26,9 @@ export default new Vuex.Store({
     clearUser(state) {
       state.user = null;
     },
+    addToCart(state, item) {
+      state.cartItems.push(item);
+    }
   },
   actions: {
     login({ commit }, { username, password }) {
@@ -44,6 +48,9 @@ export default new Vuex.Store({
       localStorage.removeItem('user');
       commit('clearUser');
     },
+    addToCart({ commit }, item) {
+      commit('addToCart', item);
+    }
   },
   modules: {
     products: Products,
