@@ -4,6 +4,7 @@
       <thead>
         <tr>
           <th>Product ID</th>
+          <th>Name</th>
           <th>Image</th>
           <th>Price</th>
           <th>Quantity</th>
@@ -12,37 +13,32 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(cart, key) in getCartItems" :key="cart.id">
-          <td>{{ key + 1 }}</td>
+        <tr v-for="(cart, index) in getCartItems" :key="index">
           <td>{{ cart.id }}</td>
+          <td>{{ cart.name }}</td>
           <td>
             <figure class="image is-32x32">
-              <img alt="Image" />
+              <img :src="cart.image" alt="Product Image" />
             </figure>
           </td>
-          <td>
-            <router-link :to="{ name: 'product', params: { id: cart.id } }">{{ "fdafdsa" }}</router-link>
-          </td>
-          <td>${{ "3" }}</td>
-          <td>{{ cart.qty }}</td>
           <td>${{ cart.price }}</td>
+          <td>{{ cart.qty }}</td>
+          <td>${{ cart.price * cart.qty }}</td>
           <td>
             <a
               class="button is-danger mr-3"
               href="#"
               @click.prevent="removeItem(cart.id)"
-              
             >Remove</a>
           </td>
         </tr>
       </tbody>
     </table>
     <div class="cart-meta has-text-right is-size-5 mb-4">
-      <p>Total: ${{ "0" }}</p>
+      <p>Total: ${{ getCartTotal }}</p>
     </div>
-    <!-- <coupon :cart_items="getCartItems" /> -->
     <div class="cart-meta has-text-right is-size-5 mb-4">
-      <p class="mb-4">Sub Total: ${{ "0" }}</p>
+      <p class="mb-4">Sub Total: ${{ getCartSubTotal }}</p>
       <p>
         <a class="button is-success is-large">Checkout</a>
       </p>
@@ -51,11 +47,9 @@
 </template>
 <script>
 import { mapGetters } from "vuex";
-// import Coupon from "./Coupon";
 export default {
   name: "Cart",
   components: {
-    // Coupon
   },
   computed: {
     ...mapGetters(['getCartItems', 'getCartTotal', 'getCartSubTotal'])
@@ -69,7 +63,7 @@ export default {
       this.removeCartItem({ itemID: id });
     },
     fetchProductsFromLocalStorage() {
-      const getCartItems = localStorage.getItem('products');
+      const getCartItems = localStorage.getItem('addToCart');
       return getCartItems
     },
   },

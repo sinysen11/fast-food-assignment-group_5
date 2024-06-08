@@ -77,7 +77,7 @@
                   <p>{{ product.description.substring(0, 100) }}</p>
                 </div>
                 <div class="actions buttons">
-                  <form action method="post" @submit.prevent="addThisToCart" v-if="!canCreate">
+                  <form action method="post" @submit.prevent="addThisToCart(product)" v-if="!canCreate">
                     <button type="submit" class="btn btn-primary">+ Add</button>
                   </form>
 
@@ -152,7 +152,7 @@ export default {
       );
     },
     ...mapGetters(["singleProduct"]),
-    ...mapGetters(['userRole']), 
+    ...mapGetters(['userRole']),
     canCreate() {
       return this.userRole === 'admin';
     },
@@ -164,8 +164,11 @@ export default {
   },
   methods: {
     ...mapActions(["fetchProductFromApi", "addToCart"]),
-    addThisToCart() {
+    addThisToCart(product) {
       this.addToCart({ qty: this.quantity, id: this.$route.params.id });
+      const addToCart = JSON.parse(localStorage.getItem('addToCart')) || [];
+      addToCart.push(product);
+      localStorage.setItem('addToCart', JSON.stringify(addToCart));
     },
 
     openDialog() {
