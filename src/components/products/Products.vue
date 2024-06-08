@@ -3,7 +3,7 @@
     <div class="search-container">
       <input type="text" v-model="input" placeholder="Search fruits..." class="search-input" />
       <div class="btn-container">
-        <button class="btn btn-success" @click="openDialog">Create</button>
+        <button class="btn btn-success" @click="openDialog" v-if="canCreate">+ Create</button>
       </div>
     </div>
 
@@ -151,7 +151,11 @@ export default {
         product.name.toLowerCase().includes(this.input.toLowerCase())
       );
     },
-    ...mapGetters(["singleProduct"])
+    ...mapGetters(["singleProduct"]),
+    ...mapGetters(['userRole']), 
+    canCreate() {
+      return this.userRole === 'admin';
+    },
   },
   beforeRouteUpdate(to, from, next) {
     console.log(to)
@@ -164,7 +168,6 @@ export default {
       console.log("click")
       this.addToCart({ qty: this.quantity, id: this.$route.params.id });
     },
-
 
     openDialog() {
       this.editMode = false;

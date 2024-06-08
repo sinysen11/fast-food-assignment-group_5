@@ -5,24 +5,73 @@
         <img class="logo-image" alt="Vue logo" src="../assets/ff.png" />
       </div>
       <div class="nav-links">
-        <router-link class="nav-link" to="/" exact active-class="active-link">Products</router-link>
-        <router-link class="nav-link" to="/contactus" active-class="active-link">Contact Us</router-link>
+        <router-link v-if="canAccess('Products')" class="nav-link" to="/" exact
+          active-class="active-link">Products</router-link>
+        <router-link v-if="canAccess('Users')" class="nav-link" to="/users"
+          active-class="active-link">Users</router-link>
+        <router-link v-if="canAccess('History')" class="nav-link" to="/history"
+          active-class="active-link">History</router-link>
+        <router-link v-if="canAccess('Contact Us')" class="nav-link" to="/contactus" active-class="active-link">Contact
+          Us</router-link>
       </div>
       <div class="cart-view">
-        <router-link class="nav-link" to="/cart">View Cart ({{ getCartItemsCount }} items)</router-link>
+        <router-link v-if="canAccess('View Cart')" class="nav-link view-card" to="/cart">View Cart ({{ getCartItemsCount }} items)</router-link> |
+        <a class="nav-link" v-if="!isLoggedIn" @click.prevent="openLoginModal">Login</a>
+        <a class="nav-link" v-if="isLoggedIn" @click.prevent="logout">Logout</a>
       </div>
     </div>
+    <LoginModal :showModal="isLoginModalVisible" @close="closeLoginModal" @login="handleLogin" />
   </div>
 </template>
 
-
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from 'vuex';
+import LoginModal from './LoginModal.vue';
+
 export default {
-  name: "Navigation",
+  name: 'Navigation',
+  components: {
+    LoginModal,
+  },
+  data() {
+    return {
+      isLoginModalVisible: false,
+    };
+  },
   computed: {
-    ...mapGetters(["getCartItemsCount", "getCartItems"])
-  }
+    ...mapGetters({
+      getCartItemsCount: 'getCartItemsCount',
+      isLoggedIn: 'isLoggedIn',
+      getUserRole: 'getUserRole',
+    }),
+  },
+  methods: {
+    ...mapActions(['login', 'logout']),
+
+    openLoginModal() {
+      this.isLoginModalVisible = true;
+    },
+    closeLoginModal() {
+      this.isLoginModalVisible = false;
+    },
+    handleLogin(credentials) {
+      this.login(credentials).then(() => {
+        this.closeLoginModal();
+      });
+    },
+    canAccess(link) {
+      const userRole = JSON.parse(localStorage.getItem("user"));
+      if (userRole) {
+        if (userRole.role === 'admin') {
+          return ['Products', 'Users', 'Logout'].includes(link);
+        } else if (userRole.role === 'user') {
+          return ['Products', 'History', 'Contact Us', 'View Cart', 'Logout'].includes(link);
+        }
+      } else {
+        return ['Products', 'History', 'Contact Us', 'View Cart', 'Logout'].includes(link);
+      }
+    },
+  },
 };
 </script>
 
