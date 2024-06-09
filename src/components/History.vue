@@ -38,7 +38,7 @@ export default {
     loadHistoryFromLocalStorage() {
       const storedHistoryItems = localStorage.getItem('history');
       if (storedHistoryItems) {
-        this.historyItems = JSON.parse(storedHistoryItems);
+        this.historyItems = JSON.parse(storedHistoryItems).reverse();
       }
     }
   }
