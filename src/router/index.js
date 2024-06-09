@@ -1,7 +1,8 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
-import Cart from "../components/Cart.vue"
+import Cart from "../components/Cart.vue";
+import History from "../components/History.vue"
 
 Vue.use(VueRouter);
 
@@ -10,6 +11,9 @@ const routes = [
     path: "/",
     name: "Home",
     component: Home,
+    meta: {
+      title: 'Fast-Food'
+    }
   },
   {
     path: "/product/:id",
@@ -25,11 +29,11 @@ const routes = [
     component: Cart
   },
   {
-    path: "/coupons",
-    name: "coupons",
-    component: () =>
-      import(/* webpackChunkName: "coupons" */ "../views/Coupons.vue"),
+    path: "/history",
+    name: "history",
+    component: History
   },
+
 ];
 
 const router = new VueRouter({

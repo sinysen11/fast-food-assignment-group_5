@@ -121,6 +121,7 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
+import { v4 as uuidv4 } from 'uuid'; // Import the uuid library
 import emptyProductImage from '@/assets/empty-cart.png';
 export default {
   name: "Products",
@@ -165,10 +166,14 @@ export default {
   methods: {
     ...mapActions(["fetchProductFromApi", "addToCart"]),
     addThisToCart(product) {
-      this.addToCart({ qty: this.quantity, id: this.$route.params.id });
-      const addToCart = JSON.parse(localStorage.getItem('addToCart')) || [];
-      addToCart.push(product);
-      localStorage.setItem('addToCart', JSON.stringify(addToCart));
+      const productToAdd = {
+        id: uuidv4(),
+        name: product.name,
+        price: product.price,
+        qty: this.quantity,
+        image: product.image
+      };
+      this.addToCart(productToAdd);
     },
 
     openDialog() {
