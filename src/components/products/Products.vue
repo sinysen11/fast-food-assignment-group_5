@@ -59,32 +59,32 @@
           <div class="product">
             <div class="card">
               <div class="card-image">
-                <figure class="image is-square">
-                  <img :src="product.image" alt="Product Image" />
+                <figure class="image" style="height: 300px; overflow: hidden;">
+                  <img :src="product.image" alt="Product Image"/>
                 </figure>
               </div>
               <div class="card-content">
                 <div class="media">
                   <div class="media-content">
-                    <p class="is-size-4 has-text-weight-bold mb-2 product-title">
-                      {{ product.name }}
-                    </p>
-                    <p class="subtitle is-6 has-text-semi-bold">Category: {{ "Fast Food" }}</p>
+                    <div class="product-info">
+                      <p class="product-name">{{ product.name }}</p>
+                      <p class="product-price">Price: ${{ product.price }}</p>
+                    </div>
                   </div>
                 </div>
-                <p class="has-text-weight-bold mb-2">Price: ${{ product.price }}</p>
                 <div class="content">
                   <p>{{ product.description.substring(0, 100) }}</p>
                 </div>
-                <div class="actions buttons">
-                  <form action method="post" @submit.prevent="addThisToCart(product)" v-if="!canCreate">
-                    <button type="submit" class="btn btn-primary">+ Add</button>
+                <div class="actions buttons add-btn">
+                  <form action method="post" @submit.prevent="addThisToCart(product)" v-if="!canCreate"
+                    class="button-form">
+                    <button type="submit" class="btn btn-gray" style="font-size: 12px;">ADD TO CART</button>
                   </form>
 
                   <div class="action-buttons-right" v-if="canCreate">
-                    <button type="button" class="btn btn-primary" @click="openEditDialog(product)">Edit</button>
-                    <button type="button" class="btn btn-primary"
-                      @click="openDeleteConfirmation(product.id)">Delete</button>
+                    <button type="button" class="btn btn-primary" @click="openEditDialog(product)"><font-awesome-icon :icon="['fas', 'edit']" /></button>
+                    <button type="button" class="btn btn-delete"
+                      @click="openDeleteConfirmation(product.id)"><font-awesome-icon :icon="['fas', 'trash']" /></button>
                   </div>
                 </div>
               </div>
@@ -93,6 +93,7 @@
         </div>
       </div>
     </div>
+
 
     <div v-else>
       <div class="empty-logo">
@@ -427,6 +428,7 @@ label {
 
 .action-buttons-right {
   display: flex;
+  margin-left: -15px;
 }
 
 .btn {
@@ -472,6 +474,57 @@ label {
   img {
     max-width: 30%;
   }
+}
+
+.card-image {
+  display: flex;
+  justify-content: center;
+}
+
+.card-image img {
+  max-width: 68%;
+  margin: 0 auto;
+}
+
+
+.product-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 8px;
+}
+
+.product-name {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #333;
+  /* Dark text color */
+}
+
+.product-price {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #007bff;
+}
+
+.content {
+  margin-top: -20px;
+}
+
+.icon-right {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn-gray {
+  background-color: #000000;
+  color: #fff;
+}
+
+.btn-delete {
+  background-color: red;
 }
 
 hr {

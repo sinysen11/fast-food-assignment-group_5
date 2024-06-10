@@ -78,4 +78,7 @@ export default new Vuex.Store({
     cart: Cart,
     coupons: Coupons,
   },
+  created() {
+    this.dispatch('loadCartFromLocalStorage');
+  }
 });

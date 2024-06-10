@@ -15,7 +15,12 @@
           Us</router-link>
       </div>
       <div class="cart-view">
-        <router-link v-if="canAccess('View Cart')" class="nav-link view-card" to="/cart">View Cart ({{ getCartItemsCount }} items)</router-link> |
+        <router-link v-if="canAccess('View Cart')" class="nav-link view-cart" to="/cart" style="position: relative;">
+          <font-awesome-icon :icon="['fas', 'shopping-cart']" style="margin-right: 5px; width: 26px; height: 18px; color: #717171;" />
+          <span class="cart-item-count"
+            style="position: absolute; top: 0; right: 0; transform: translate(50%, -50%); background-color: #007bff; color: #fff; border-radius: 50%; padding: 0px 6px; font-size: 0.8em; margin-right: 5px;">{{
+            getCartItemsCount }}</span>
+        </router-link> | 
         <a class="nav-link" v-if="!isLoggedIn" @click.prevent="openLoginModal">Login</a>
         <a class="nav-link" v-if="isLoggedIn" @click.prevent="logout">Logout</a>
       </div>
@@ -40,9 +45,9 @@ export default {
   },
   computed: {
     ...mapGetters({
-      getCartItemsCount: 'getCartItemsCount',
       isLoggedIn: 'isLoggedIn',
       getUserRole: 'getUserRole',
+      getCartItemsCount: 'getCartItemsCount',
     }),
   },
   methods: {
@@ -71,9 +76,16 @@ export default {
         return ['Products', 'History', 'Contact Us', 'View Cart', 'Logout'].includes(link);
       }
     },
+    fetchCartItemsCount() {
+      this.$store.dispatch('fetchCartItemsCount');
+    },
   },
+  created() {
+    this.fetchCartItemsCount();
+  }
 };
 </script>
+
 
 <style lang="scss" scoped>
 * {
@@ -128,6 +140,7 @@ html {
       font-size: 1.1rem;
       font-weight: bold;
       color: #333;
+      font-size: 16px;
       text-decoration: none;
 
       &:hover {
@@ -149,6 +162,7 @@ html {
       font-size: 1.1rem;
       font-weight: bold;
       color: #333;
+      font-size: 16px;
       text-decoration: none;
 
       &:hover {
