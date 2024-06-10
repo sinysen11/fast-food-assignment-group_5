@@ -29,7 +29,7 @@
       </tbody>
     </table>
     <div class="cart-meta has-text-right is-size-5 mb-4" v-if="getCartItems.length > 0">
-      <p>Total: ${{ getCartTotal }}</p>
+      <p style="font-weight: bold;">Total: ${{ getCartTotal }}</p>
     </div>
     <div class="cart-meta has-text-right is-size-5 mb-4" v-if="getCartItems.length > 0">
       <p>
@@ -41,18 +41,21 @@
       <div class="box">
         <h1 class="title">Payment</h1>
         <p>Total Amount: ${{ getCartTotal }}</p>
-        <b-field label="Card Number">
-          <b-input placeholder="Enter your Visa card number"></b-input>
-        </b-field>
-        <b-field label="Expiry Date">
-          <b-input type="month" placeholder="MM/YY"></b-input>
-        </b-field>
-        <b-field label="CVV">
-          <b-input type="password" placeholder="CVV"></b-input>
-        </b-field>
-        <div class="has-text-right">
-          <b-button type="is-primary" @click="processPayment">Pay Now</b-button>
-        </div>
+        <form @submit.prevent="processPayment">
+          <b-field label="Card Number">
+            <b-input type="number" ref="cardNumber" placeholder="Enter your Visa card number" required></b-input>
+          </b-field>
+          <b-field label="Expiry Date">
+            <b-input ref="expiryDate" placeholder="MM/YY" required pattern="^(0[1-9]|1[0-2])\/([0-9]{2})$"></b-input>
+          </b-field>
+          <b-field label="CVV">
+            <b-input ref="cvv" type="number" placeholder="CVV" required></b-input>
+          </b-field>
+          <div class="has-text-right">
+            <b-button type="is-danger" style="margin-right: 10px" @click="cancelPayment">Cancel</b-button>
+            <b-button type="is-primary" native-type="submit">Pay Now</b-button>
+          </div>
+        </form>
       </div>
     </b-modal>
     <div class="empty-logo" v-if="getCartItems.length === 0">
@@ -92,12 +95,8 @@ export default {
       }
     },
     processPayment() {
-      // Process the payment
-      alert(`Payment of $${this.getCartTotal} processed!`);
-
-      // Create a new history entry
       const cartItems = this.getCartItems;
-      const totalPrice = this.getCartTotal;// 
+      const totalPrice = this.getCartTotal;
       const orderDate = new Date().toLocaleString();
       const historyItem = {
         names: cartItems.map(item => item.name).join(', '),
@@ -116,6 +115,9 @@ export default {
       localStorage.removeItem('addToCart');
       this.setCartItems([]);
 
+      this.showPaymentModal = false;
+    },
+    cancelPayment() {
       this.showPaymentModal = false;
     }
   }

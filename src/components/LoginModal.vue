@@ -2,7 +2,7 @@
     <div v-if="showModal" class="modal">
       <div class="modal-content">
         <span class="close" @click="closeModal">&times;</span>
-        <h2>Login</h2>
+        <h2 style="font-size: 28px; font-weight: bold; color: #007bff; margin-bottom: 5px;">Login</h2>
         <form @submit.prevent="handleLogin">
           <div class="form-group">
             <label for="username">Username:</label>
@@ -62,7 +62,7 @@
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    width: 300px;
+    width: 480px;
     position: relative;
   }
   
@@ -85,8 +85,9 @@
   
   input {
     width: 100%;
-    padding: 8px;
+    padding: 11px;
     box-sizing: border-box;
+    border-radius: 5px;
   }
   
   button {

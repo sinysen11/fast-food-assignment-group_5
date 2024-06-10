@@ -60,7 +60,7 @@
             <div class="card">
               <div class="card-image">
                 <figure class="image" style="height: 300px; overflow: hidden;">
-                  <img :src="product.image" alt="Product Image"/>
+                  <img :src="product.image" alt="Product Image" />
                 </figure>
               </div>
               <div class="card-content">
@@ -82,9 +82,11 @@
                   </form>
 
                   <div class="action-buttons-right" v-if="canCreate">
-                    <button type="button" class="btn btn-primary" @click="openEditDialog(product)"><font-awesome-icon :icon="['fas', 'edit']" /></button>
+                    <button type="button" class="btn btn-primary" @click="openEditDialog(product)"><font-awesome-icon
+                        :icon="['fas', 'edit']" /></button>
                     <button type="button" class="btn btn-delete"
-                      @click="openDeleteConfirmation(product.id)"><font-awesome-icon :icon="['fas', 'trash']" /></button>
+                      @click="openDeleteConfirmation(product.id)"><font-awesome-icon
+                        :icon="['fas', 'trash']" /></button>
                   </div>
                 </div>
               </div>
@@ -103,12 +105,15 @@
 
     <div v-if="confirmDelete" class="modal">
       <div class="modal-dialog">
-        <div class="modal-content">
+        <div class="modal-content-delete">
           <div class="modal-header">
             <h2 class="modal-title">Confirm Delete</h2>
           </div>
           <div class="modal-body">
-            <p>Are you sure you want to delete this product?</p>
+            <p style="font-weight: bold;">Are you sure you want to delete this product?</p>
+          </div>
+          <div class="empty-logo">
+            <img :src="deleteProductImage" class="" alt="Empty Product">
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" @click="cancelDelete">No</button>
@@ -124,6 +129,7 @@
 import { mapGetters, mapActions } from "vuex";
 import { v4 as uuidv4 } from 'uuid'; // Import the uuid library
 import emptyProductImage from '@/assets/empty-cart.png';
+import deleteProductImage from '@/assets/delete.png';
 export default {
   name: "Products",
   data() {
@@ -144,7 +150,8 @@ export default {
         imagePreview: null,
         description: ''
       },
-      emptyProductImage
+      emptyProductImage,
+      deleteProductImage
     };
   },
   computed: {
@@ -525,6 +532,10 @@ label {
 
 .btn-delete {
   background-color: red;
+}
+
+.modal-content-delete {
+  width: 480px;
 }
 
 hr {
