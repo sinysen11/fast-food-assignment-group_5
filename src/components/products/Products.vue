@@ -1,12 +1,12 @@
 <template>
   <div>
     <div class="search-container">
-      <input type="text" v-model="input" placeholder="Search fruits..." class="search-input" />
+      <input type="text" v-model="input" placeholder="Search" class="search-input" />
       <div class="btn-container">
-        <button class="btn btn-success" @click="openDialog" v-if="canCreate">+ Create</button>
+        <button class="btn btn-success button-create" @click="openDialog" v-if="canCreate">+ Create</button>
       </div>
     </div>
-
+    <h4 class="product-title">Products</h4>
     <div v-if="showDialog" class="modal">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -49,19 +49,37 @@
         </div>
       </div>
     </div>
-
-    <hr>
-
     <div v-if="filteredProducts.length > 0" class="products">
       <div class="columns is-multiline is-desktop is-widescreen is-fullhd">
         <div v-for="product in filteredProducts" :key="product.id"
-          class="column is-4-fullhd is-4-widescreen is-6-desktop">
+          class="column is-3-fullhd is-3-widescreen is-4-desktop">
           <div class="product">
             <div class="card">
-              <div class="card-image">
-                <figure class="image" style="height: 300px; overflow: hidden;">
-                  <img :src="product.image" alt="Product Image" />
-                </figure>
+              <div class="card-implement">
+                <div class="actions buttons add-btn">
+                  <div class="action-right">
+                    <form action method="post" @submit.prevent="addThisToCart(product)" v-if="!canCreate"
+                      class="button-form">
+                      <button type="submit" class="btn btn-gray">
+                        <font-awesome-icon :icon="['fas', 'shopping-cart']"
+                          style="width: 30px; height: 23px; color: #717171;" />
+                      </button>
+                    </form>
+
+                    <div class="action-buttons-right" v-if="canCreate">
+                      <button type="button" class="btn btn-primary" @click="openEditDialog(product)"><font-awesome-icon
+                          :icon="['fas', 'edit']" /></button>
+                      <button type="button" class="btn btn-delete"
+                        @click="openDeleteConfirmation(product.id)"><font-awesome-icon
+                          :icon="['fas', 'trash']" /></button>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-image">
+                  <figure class="image" style="height: 230px; overflow: hidden;">
+                    <img :src="product.image" alt="Product Image" />
+                  </figure>
+                </div>
               </div>
               <div class="card-content">
                 <div class="media">
@@ -75,27 +93,12 @@
                 <div class="content">
                   <p>{{ product.description.substring(0, 100) }}</p>
                 </div>
-                <div class="actions buttons add-btn">
-                  <form action method="post" @submit.prevent="addThisToCart(product)" v-if="!canCreate"
-                    class="button-form">
-                    <button type="submit" class="btn btn-gray" style="font-size: 12px;">ADD TO CART</button>
-                  </form>
-
-                  <div class="action-buttons-right" v-if="canCreate">
-                    <button type="button" class="btn btn-primary" @click="openEditDialog(product)"><font-awesome-icon
-                        :icon="['fas', 'edit']" /></button>
-                    <button type="button" class="btn btn-delete"
-                      @click="openDeleteConfirmation(product.id)"><font-awesome-icon
-                        :icon="['fas', 'trash']" /></button>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-
 
     <div v-else>
       <div class="empty-logo">
@@ -124,6 +127,7 @@
     </div>
   </div>
 </template>
+
 
 <script>
 import { mapGetters, mapActions } from "vuex";
@@ -296,9 +300,25 @@ export default {
 };
 </script>
 
-
-
 <style scoped>
+.search-container {
+  margin-top: 30px;
+}
+
+.products {
+  margin-top: 20px;
+}
+
+.product-title {
+  font-size: 18px;
+  font-weight: bold;
+  color: #717273;
+}
+
+.card-content {
+  /* margin-top: -60px; */
+}
+
 .search-container {
   display: flex;
   align-items: center;
@@ -307,11 +327,13 @@ export default {
 
 .search-input {
   flex: 1;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  padding: 14px;
+  border: 1px solid #c1bfed;
+  border-radius: 24px;
   max-width: 430px;
   margin-right: 10px;
+  background: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .btn-container {
@@ -319,11 +341,10 @@ export default {
 }
 
 .btn {
-  padding: 10px 20px;
-  background-color: green;
+  padding: 6px 10px;
   color: white;
   border: none;
-  border-radius: 8px;
+  border-radius: 12px;
   cursor: pointer;
   margin-left: 12px;
 }
@@ -396,7 +417,7 @@ label {
 }
 
 .btn-primary {
-  background-color: #007bff;
+  background-color: #b5b7b9;
   color: white;
   border: none;
 }
@@ -429,8 +450,9 @@ label {
 
 .actions.buttons {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
+  margin-bottom: none;
 }
 
 .action-buttons-right {
@@ -439,7 +461,7 @@ label {
 }
 
 .btn {
-  padding: 10px 20px;
+  padding: 6px 12px;
   background-color: green;
   color: white;
   border: none;
@@ -481,6 +503,20 @@ label {
   img {
     max-width: 30%;
   }
+}
+
+.card {
+  background-color: white;
+  border-radius: 23px;
+  box-shadow: 0 0.5em 1em -0.125em rgba(10, 10, 10, 0.1), 0 0px 0 1px rgba(10, 10, 10, 0.02);
+  color: #4a4a4a;
+  max-width: 100%;
+  position: relative;
+}
+
+.card-implement {
+  background: rgb(242, 242, 242);
+  border-radius: 22px;
 }
 
 .card-image {
@@ -526,7 +562,7 @@ label {
 }
 
 .btn-gray {
-  background-color: #000000;
+  background-color: rgb(242, 242, 242);
   color: #fff;
 }
 
@@ -538,9 +574,46 @@ label {
   width: 480px;
 }
 
-hr {
-  background-color: #007BFF;
+.action-right {
+  margin-top: 10px;
+  padding-right: 10px;
 }
+
+.columns {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.column.is-3-fullhd,
+.column.is-3-widescreen,
+.column.is-4-desktop {
+  flex: 0 0 24%;
+  max-width: 24%;
+  margin-bottom: 20px;
+}
+
+.button-create {
+  width: 98px;
+  height: 42px;
+  background: #007bff;
+  border-radius: 20px;
+}
+
+@media (max-width: 1024px) {
+  .column.is-4-desktop {
+    flex: 0 0 48%;
+    max-width: 48%;
+  }
+}
+
+@media (max-width: 768px) {
+  .column.is-4-desktop {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}
+
 
 @keyframes spin {
   0% {

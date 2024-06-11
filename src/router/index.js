@@ -6,6 +6,7 @@ import History from "../components/History.vue";
 import Users from "../components/Users.vue";
 import Login from "../components/Login.vue";
 import Signup from "../components/Signup.vue";
+import ContactUs from "../components/ContactUs.vue"
 
 Vue.use(VueRouter);
 
@@ -60,6 +61,12 @@ const routes = [
     path: "/history",
     name: "history",
     component: History,
+    beforeEnter: guard,
+  },
+  {
+    path: "/contactus",
+    name: "contactus",
+    component: ContactUs,
     beforeEnter: guard,
   },
   {

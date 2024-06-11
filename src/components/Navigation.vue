@@ -11,8 +11,7 @@
           active-class="active-link">Users</router-link>
         <router-link v-if="canAccess('History')" class="nav-link" to="/history"
           active-class="active-link">History</router-link>
-        <router-link v-if="canAccess('Contact Us')" class="nav-link" to="/contactus" active-class="active-link">Contact
-          Us</router-link>
+        <router-link v-if="canAccess('Contact Us')" class="nav-link" to="/contactus" active-class="active-link">Contact Us</router-link>
       </div>
       <div class="cart-view">
         <router-link v-if="canAccess('View Cart')" class="nav-link view-cart-link" to="/cart"
@@ -78,7 +77,7 @@ export default {
     canAccess(link) {
       const users = JSON.parse(localStorage.getItem("activeUser"));
       if (users?.role === 'admin') {
-        return ['Products', 'Users', 'Logout'].includes(link);
+        return ['Products', 'History', 'Users', 'Logout'].includes(link);
       } else if (users?.role === 'user') {
         return ['Products', 'History', 'Contact Us', 'View Cart', 'Logout'].includes(link);
       }

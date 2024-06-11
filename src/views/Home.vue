@@ -1,7 +1,6 @@
 <template>
   <div class="home products">
-    <h1 class="is-size-2 mb-4">Products</h1>
-    <Products />
+     <Products />
   </div>
 </template>
 

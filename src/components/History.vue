@@ -54,6 +54,8 @@ export default {
 .title {
   text-align: center;
   margin-bottom: 20px;
+  color: #007bff;
+  font-weight: bold;
 }
 
 .history-item {
