@@ -5,11 +5,10 @@ import Cart from "./modules/cart";
 import Coupons from "./modules/coupons";
 
 Vue.use(Vuex);
-
 export default new Vuex.Store({
   state: {
     cartItems: [],
-    user: JSON.parse(localStorage.getItem('user')) || null,
+    user: JSON.parse(localStorage.getItem('activeUser')) || null,
   },
   getters: {
     getCartItemsCount: (state) => state.cartItems.length,

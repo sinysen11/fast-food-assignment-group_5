@@ -23,6 +23,18 @@ Vue.config.productionTip = false;
 Vue.use(VueAxios, axios);
 Vue.use(Buefy);
 
+if (localStorage.users === undefined) {
+  let users = [
+    {
+      username: "admin",
+      password: "123456",
+      role: "admin"
+    },
+  ];
+  localStorage.setItem("users", JSON.stringify(users));
+}
+
+Vue.config.productionTip = false;
 new Vue({
   router,
   store,

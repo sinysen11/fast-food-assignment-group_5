@@ -15,32 +15,39 @@
           Us</router-link>
       </div>
       <div class="cart-view">
-        <router-link v-if="canAccess('View Cart')" class="nav-link view-cart" to="/cart" style="position: relative;">
-          <font-awesome-icon :icon="['fas', 'shopping-cart']" style="margin-right: 5px; width: 26px; height: 18px; color: #717171;" />
+        <router-link v-if="canAccess('View Cart')" class="nav-link view-cart-link" to="/cart"
+          style="position: relative;">
+          <font-awesome-icon :icon="['fas', 'shopping-cart']"
+            style="margin-right: 5px; width: 26px; height: 18px; color: #717171;" />
           <span class="cart-item-count"
             style="position: absolute; top: 0; right: 0; transform: translate(50%, -50%); background-color: #007bff; color: #fff; border-radius: 50%; padding: 0px 6px; font-size: 0.8em; margin-right: 5px;">{{
-            getCartItemsCount }}</span>
-        </router-link> | 
-        <a class="nav-link" v-if="!isLoggedIn" @click.prevent="openLoginModal">Login</a>
-        <a class="nav-link" v-if="isLoggedIn" @click.prevent="logout">Logout</a>
+              getCartItemsCount }}</span>
+        </router-link>
+        |
+        <div class="navbar__right">
+          <div v-if="!user">
+            <router-link class="router__link" to="/login">
+              <h5>Login</h5>
+            </router-link>
+          </div>
+          <a v-if="user" class="router__link" href="" @click.prevent="logout">Logout</a>
+        </div>
       </div>
     </div>
-    <LoginModal :showModal="isLoginModalVisible" @close="closeLoginModal" @login="handleLogin" />
   </div>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
-import LoginModal from './LoginModal.vue';
 
 export default {
   name: 'Navigation',
   components: {
-    LoginModal,
   },
   data() {
     return {
       isLoginModalVisible: false,
+      user: "",
     };
   },
   computed: {
@@ -64,21 +71,29 @@ export default {
         this.closeLoginModal();
       });
     },
+    logout() {
+      localStorage.removeItem("activeUser");
+      window.location.href = "/login";
+    },
     canAccess(link) {
-      const userRole = JSON.parse(localStorage.getItem("user"));
-      if (userRole) {
-        if (userRole.role === 'admin') {
-          return ['Products', 'Users', 'Logout'].includes(link);
-        } else if (userRole.role === 'user') {
-          return ['Products', 'History', 'Contact Us', 'View Cart', 'Logout'].includes(link);
-        }
-      } else {
+      const users = JSON.parse(localStorage.getItem("activeUser"));
+      if (users?.role === 'admin') {
+        return ['Products', 'Users', 'Logout'].includes(link);
+      } else if (users?.role === 'user') {
         return ['Products', 'History', 'Contact Us', 'View Cart', 'Logout'].includes(link);
       }
+      return ['Products', 'History', 'Contact Us', 'View Cart', 'Login'].includes(link);
     },
+
     fetchCartItemsCount() {
       this.$store.dispatch('fetchCartItemsCount');
     },
+  },
+  mounted() {
+    if (localStorage.activeUser) {
+      let activeUser = localStorage.activeUser;
+      this.user = JSON.parse(activeUser);
+    }
   },
   created() {
     this.fetchCartItemsCount();
@@ -141,6 +156,8 @@ html {
       font-weight: bold;
       color: #333;
       font-size: 16px;
+      margin-right: 5px;
+
       text-decoration: none;
 
       &:hover {
@@ -157,6 +174,7 @@ html {
 
   .cart-view {
     margin-left: auto;
+    display: flex;
 
     .nav-link {
       font-size: 1.1rem;
@@ -170,6 +188,20 @@ html {
         text-decoration: underline;
       }
     }
+  }
+
+  .navbar__right {
+    padding-left: 10px;
+
+  }
+
+  .navbar__right>h3 {
+    cursor: pointer;
+    color: rgb(255, 255, 255);
+  }
+
+  .view-cart-link {
+    margin-right: 6px;
   }
 
   @media (max-width: 768px) {
