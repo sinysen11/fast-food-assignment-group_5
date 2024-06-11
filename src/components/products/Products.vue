@@ -51,8 +51,7 @@
     </div>
     <div v-if="filteredProducts.length > 0" class="products">
       <div class="columns is-multiline is-desktop is-widescreen is-fullhd">
-        <div v-for="product in filteredProducts" :key="product.id"
-          class="column is-3-fullhd is-3-widescreen is-4-desktop">
+        <div v-for="product in filteredProducts" :key="product.id" class="column is-3-fullhd is-3-widescreen is-4-desktop">
           <div class="product">
             <div class="card">
               <div class="card-implement">
@@ -582,15 +581,31 @@ label {
 .columns {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
 }
 
-.column.is-3-fullhd,
-.column.is-3-widescreen,
-.column.is-4-desktop {
-  flex: 0 0 24%;
-  max-width: 24%;
+.column {
+  width: calc(25% - 20px);
   margin-bottom: 20px;
+}
+
+
+
+@media (max-width: 1200px) {
+  .modal-dialog {
+    width: 60%;
+    margin-top: 20px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .modal-dialog {
+    width: 84%;
+    margin-top: 15px;
+  }
+  .column.is-4-desktop {
+    flex: 0 0 48%;
+    max-width: 48%;
+  }
 }
 
 .button-create {
@@ -599,22 +614,12 @@ label {
   background: #007bff;
   border-radius: 20px;
 }
-
-@media (max-width: 1024px) {
-  .column.is-4-desktop {
-    flex: 0 0 48%;
-    max-width: 48%;
-  }
-}
-
 @media (max-width: 768px) {
   .column.is-4-desktop {
     flex: 0 0 100%;
     max-width: 100%;
   }
 }
-
-
 @keyframes spin {
   0% {
     transform: rotate(0deg);
